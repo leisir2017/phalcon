@@ -1,11 +1,7 @@
 <?php
 
-namespace Apps\Models;
-
-use Phalcon\Mvc\Model;
-
 # 模型表
-class Article extends Model {
+class Article extends \Phalcon\Mvc\Model {
     # 状态码
 
     protected $code = 0;
@@ -138,6 +134,11 @@ class Article extends Model {
         $this->response = $lists;
 
         return $this->response;
+    }
+
+    public static function detailFornumber($number)
+    {
+        return self::findFirstBynumber($number);
     }
 
 

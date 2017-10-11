@@ -24,16 +24,9 @@ class Module implements ModuleDefinitionInterface
         $loader->registerNamespaces(
             [
                 'Apps\Api\Controllers' => __DIR__.'/controllers/',
-                'Apps\Models' => __DIR__ . '/../models/'
+                'Apps\Api\Models' => __DIR__.'/models/',
             ]
         );
-
-        $loader->registerDirs(
-            array(
-                'modelsDir'      => APP_PATH. 'models/', #注意这里，必须填写，否则models/下的文件不能共用。
-            )
-        );
-
 
         $loader->register();
     }
@@ -82,7 +75,7 @@ class Module implements ModuleDefinitionInterface
             $eventsManager = new \Phalcon\Events\Manager();
           
             //从di中获取共享的profiler实例
-            $profiler = $di->getProfiler();
+            $profiler = new \Phalcon\Db\Profiler();
           
             //监听所有的db事件
             $eventsManager->attach('db', function($event, $connection) use ($profiler) {
@@ -102,6 +95,7 @@ class Module implements ModuleDefinitionInterface
                     "username" => $config->database->username,
                     "password" => $config->database->password,
                     "dbname"   => $config->database->name,
+                    "charset"  => $config->database->charset
                 ]
             );
           

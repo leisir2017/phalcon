@@ -2,14 +2,16 @@
 
 use Phalcon\Mvc\Application;
 
+    # 时区定位中国
     date_default_timezone_set('PRC');
 
 try {
 
 
-    # 项目路径
+    # 项目根路径
     define('APP_PATH', dirname(dirname(__FILE__)) . '/');
 
+    # 配置文件
     $config = require APP_PATH. 'config/config.php';
 
     # 第三方路径
@@ -22,7 +24,7 @@ try {
     define('STORAGE', $config->application->storageDir );
 
     /**
-     * Include services
+     * 包含注册服务文件
      */
     require APP_PATH . 'config/services.php';
 

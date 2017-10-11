@@ -1,7 +1,5 @@
 <?php
 
-namespace Apps\Models;
-
 class ArticleCate extends \Phalcon\Mvc\Model {
     # 状态码
 

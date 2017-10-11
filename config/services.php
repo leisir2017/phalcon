@@ -8,6 +8,7 @@ use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
+use Phalcon\Mvc\Router\Annotations as RouterAnnotations;
 
 /**
  * The FactoryDefault Dependency Injector automatically registers the right
@@ -15,29 +16,21 @@ use Phalcon\Session\Adapter\Files as SessionAdapter;
  */
 $di = new FactoryDefault();
 
-/**
- * Registering a router
- */
-// require __DIR__ . "/routes.php";
 
 $di->set('eventsManager', 'Phalcon\Events\Manager', true);
 
 
+/**
+ * Registering a router
+ */
 $di->set('router', function () use ($config)
 {
-    $router = new Router();
+
+    $router = new RouterAnnotations(false);
+    $router->setUriSource(Router::URI_SOURCE_SERVER_REQUEST_URI);
+    $router->removeExtraSlashes(false);
     
     require __DIR__ . "/routes.php";
-
-    $router->setDefaultNamespace("Apps\Frontend\Controllers");
-
-    $router->setDefaultModule("frontend");
-
-    $router->setDefaultController('index');
-
-    $router->setDefaultAction('index');
-
-
 
     return $router;
 });
@@ -61,7 +54,7 @@ $di->set('flash', function ()
 $di->set('url', function () use ($config)
 {
     $url = new UrlResolver();
-    $url->setBaseUri($config->base_uri);
+    $url->setBaseUri($config->site_url);
 
     return $url;
 });
