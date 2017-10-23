@@ -9,7 +9,10 @@ use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\DI\FactoryDefault;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Mvc\Router\Annotations as RouterAnnotations;
-
+use Phalcon\Crypt;
+use Phalcon\Security;
+use Phalcon\Security\Random;
+use Phalcon\Filter;
 /**
  * The FactoryDefault Dependency Injector automatically registers the right
  * services to provide a full stack framework.
@@ -69,13 +72,66 @@ $di->set('config', $config);
 /**
  * Start the session the first time some component request the session service
  */
-$di["session"] = function () {
-    $session = new SessionAdapter();
+$di->setShared(
+    'session',
+    function () {
+        $session = new SessionAdapter();
 
-    $session->start();
+        $session->start();
 
-    return $session;
-};
+        return $session;
+    }
+);
+
+
+$di->set(
+    'crypt',
+    function () {
+        $crypt = new Crypt();
+
+        // Set a global encryption key
+        $crypt->setKey(
+            '%31.1e$i86e$f!8jz'
+        );
+
+        return $crypt;
+    },
+    true
+);
+
+$di->set(
+    'security',
+    function () {
+        $security = new Security();
+
+        // Set the password hashing factor to 12 rounds
+        $security->setWorkFactor(12);
+
+        return $security;
+    },
+    true
+);
+
+$di->set(
+    'random',
+    function () {
+        $random = new Random();
+        return $random;
+    },
+    true
+);
+
+$di->set(
+    'filter',
+    function () {
+        $filter = new Filter();
+
+        require APP_PATH . 'config/filter.php';
+
+        return $filter;
+    },
+    true
+);
 
 /**
  * If the configuration specify the use of metadata adapter use it or use memory otherwise
