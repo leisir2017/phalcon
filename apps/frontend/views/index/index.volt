@@ -5,6 +5,7 @@
 <p>资源目录：<?php echo $this->config->site_source ?></p>
 <p>接口目录：<?php echo $this->config->site_api ?></p>
 
-
-<p>数据：{{info.title}}</p>
+{% if info.title|isset %}
+	<p>数据：{{info.title}}</p>
+{% endif %}
 <p>数据：{{info1.title}}</p>
