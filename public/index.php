@@ -1,12 +1,12 @@
 <?php
 
+# 引入框架扩展
 use Phalcon\Mvc\Application;
 
     # 时区定位中国
     date_default_timezone_set('PRC');
 
 try {
-
 
     # 项目根路径
     define('APP_PATH', dirname(dirname(__FILE__)) . '/');
@@ -23,29 +23,21 @@ try {
     # 备份路径
     define('STORAGE', $config->application->storageDir );
 
-    /**
-     * 包含注册服务文件
-     */
+    # 包含注册服务文件
     require APP_PATH . 'config/services.php';
 
-    /**
-     * Handle the request
-     */
+    # 实例化核心组件 集成所有组件
     $application = new Application();
 
-    /**
-     * Assign the DI
-     */
+    # 设置集装箱
     $application->setDI($di);
 
-    /**
-     * 加入模块分组配置
-     * Register application modules
-     */
+    # 加入模块分组配置
     require APP_PATH . 'config/modules.php';
 
     $response = $application->handle();
 
+    # 输出
     echo $response->getContent();
 
 } catch (Exception $e) {
